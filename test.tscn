@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3 uid="uid://isl2yki8pyu0"]
+
+[ext_resource type="FontFile" uid="uid://cbr051f8o4u8" path="res://Font Awesome 6 Free-Regular-400.otf" id="1_lqvuc"]
+[ext_resource type="Script" path="res://FontTexture/FontTexture.gd" id="2_3r60o"]
+[ext_resource type="Script" path="res://test.gd" id="3_wv680"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_armkk"]
+bg_color = Color(0.921569, 0.921569, 0.921569, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_68vt5"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.211765, 0.211765, 0.211765, 1)
+
+[sub_resource type="Texture2D" id="Texture2D_bguop"]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("2_3r60o")
+font = ExtResource("1_lqvuc")
+font_size = 16
+text = ""
+
+[node name="Test" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_armkk")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_68vt5")
+text = "Button"
+icon = SubResource("Texture2D_bguop")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 2
+script = ExtResource("3_wv680")
