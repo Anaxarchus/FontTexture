@@ -1,10 +1,8 @@
 extends Control
 
-@export
-var font: Font
+@export_file("*.woff2", "*.ttf")
+var font: String
 
 func _ready():
-    var data := FileAccess.get_file_as_bytes(font.resource_path)
-    print(OpenTypeParser.get_search_range(data))
-    print(OpenTypeParser.get_range_shift(data))
-    print(OpenTypeParser.get_entry_selector(data))
+    var test := OpenTypeParser.get_unit_tests()
+    test.test(true)

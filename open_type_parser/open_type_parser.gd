@@ -1,11 +1,15 @@
 class_name OpenTypeParser extends RefCounted
 
+const UnitTests := preload("res://open_type_parser/open_type_parser_test.gd")
 
-static func get_sfnt_version_tag(data: PackedByteArray, big_endian:bool = true) -> int:
-    return to_int(data.slice(0, 4), big_endian)
+static func get_sfnt_version_tag(data: PackedByteArray, big_endian:bool = true) -> String:
+    return data.slice(0, 4).hex_encode()
 
-static func get_sfnt_version_tag_name(data: PackedByteArray, big_endian:bool = true) -> String:
-    return TextServerManager.get_primary_interface().tag_to_name(get_sfnt_version_tag(data, big_endian))
+static func get_uses_tto(data: PackedByteArray, big_endian:bool = true) -> bool:
+    return get_sfnt_version_tag(data, big_endian) == "00010000"
+
+static func get_uses_cff(data: PackedByteArray, big_endian:bool = true) -> bool:
+    return get_sfnt_version_tag(data, big_endian) == "4F54544F"
 
 static func get_number_of_tables(data: PackedByteArray, big_endian:bool = true) -> int:
     return to_int(data.slice(4, 6), big_endian)
@@ -75,7 +79,7 @@ static func table_get_lookup_list_offset(data: PackedByteArray, table_idx:int, b
 
 static func table_get_feature_variations_offset(data: PackedByteArray, table_idx:int, big_endian:bool = true) -> int:
     var offset := table_get_offset(data, table_idx, big_endian)
-    if table_get_minor_version(data, offset, big_endian) == 1:
+    if table_get_minor_version(data, table_idx, big_endian) == 1:
         return to_int(data.slice(offset + 10, offset + 14), big_endian)
     return -1
 
@@ -87,7 +91,12 @@ static func _table_idx_in_bounds(data: PackedByteArray, table_idx:int, big_endia
 #endregion
 
 
+static func lookup_get_substr_format():
+    pass
 
+
+
+#region Feature Getters
 static func feature_get_tag_list(data: PackedByteArray, offset:int, big_endian:bool = true) -> PackedStringArray:
     var res:PackedStringArray
     for i in feature_list_get_count(data, offset, big_endian):
@@ -103,7 +112,9 @@ static func feature_get_tag(data: PackedByteArray, offset:int, feature_idx:int, 
     return to_int(data.slice(2 + feature_idx*6, 6 + feature_idx*6))
 
 static func feature_get_tag_name(data: PackedByteArray, offset:int, feature_idx:int, big_endian:bool = true) -> String:
-    return TextServerManager.get_primary_interface().tag_to_name(feature_get_tag(data, offset, feature_idx, big_endian))
+    if !_feature_list_idx_in_bounds(data, offset, feature_idx, big_endian):
+        return "00000000"
+    return data.slice(2 + feature_idx*6, 6 + feature_idx*6).hex_encode()
 
 static func feature_get_offset(data: PackedByteArray, offset:int, feature_idx:int, big_endian:bool = true) -> int:
     if !_feature_list_idx_in_bounds(data, offset, feature_idx, big_endian):
@@ -114,10 +125,11 @@ static func get_feature_list(data: PackedByteArray):
     pass
 
 static func _feature_list_idx_in_bounds(data: PackedByteArray, offset:int, feature_idx:int, big_endian:bool = true) -> bool:
-    if feature_idx > 0 && feature_idx < feature_list_get_count(data, offset, big_endian):
-        return true
-    push_error("Error: feature_idx is out of bounds.")
-    return false
+    if feature_idx < 0 || feature_idx > feature_list_get_count(data, offset, big_endian):
+        push_error("Error: feature_idx is out of bounds.")
+        return false
+    return true
+#endregion
 
 
 
@@ -142,3 +154,7 @@ static func to_big_endian(byte_array: PackedByteArray) -> int:
         result += byte_array[i] << (8 * (length - 1 - i))
 
     return result
+
+
+static func get_unit_tests() -> OpenTypeParser:
+    return UnitTests.new()

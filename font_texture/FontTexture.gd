@@ -26,6 +26,8 @@ var _size: Vector2
 var _font_variation: FontVariation
 
 func _update():
+    if font == null:
+        return
     emit_changed()
     _update_size()
 
