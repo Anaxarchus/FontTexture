@@ -28,6 +28,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_armkk")
 script = ExtResource("3_wv680")
+font = "res://open_type_parser/noto_sans/NotoSans-VariableFont_wdth,wght.ttf"
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 2
