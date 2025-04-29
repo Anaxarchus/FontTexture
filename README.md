@@ -1,6 +1,6 @@
-# FontTexture Class
+# FontTexture2D Class
 
-There are several addons in the AssetLib at this point offering custom controls which display fonts as icons. They are all fine choices for rendering icon fonts, many of them even come with helpful icon picker widgets, but none of the ones I tested included an actual Texture2D, which is what I needed. So here is my `FontTexture`. It's quite simple, all it does is use a `TextLine` or `TextParagraph` to draw `text` to the canvas using the texture.
+There are several addons in the AssetLib at this point offering custom controls which display fonts as icons. They are all fine choices for rendering icon fonts, many of them even come with helpful icon picker widgets, but none of the ones I tested included an actual Texture2D, which is what I needed. So here is my `FontTexture2D`. It's quite simple, all it does is use a `TextLine` or `TextParagraph` to draw `text` to the canvas using the texture.
 
 ## Usage
 
